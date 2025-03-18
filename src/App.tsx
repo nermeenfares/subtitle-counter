@@ -35,7 +35,6 @@ export default function App() {
   const [wordCount, setWordCount] = useState<number>(0);
   const animationDone = useRef(false);
 
-  // Typing animation
   useEffect(() => {
     if (animationDone.current) return;
 
@@ -55,25 +54,20 @@ export default function App() {
     return () => clearInterval(typingInterval);
   }, []);
 
-  // Handle input and update word count
   const handleInput = (text: string) => {
-    // Remove lines that look like timestamps
     const cleanedText = text.replace(/\d+\s+\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}/g, '');
     setInputText(cleanedText);
 
-    // Calculate word count
     const words = cleanedText.match(/[\p{Script=Arabic}\w'’-]+/gu) || [];
     setWordCount(words.length);
   };
 
   return (
     <div className='p-2'>
-      {/* Typing animation */}
       <div className='typing-animation'>
         <pre>{displayText}</pre>
       </div>
 
-      {/* Input box */}
       <textarea
         value={inputText}
         onChange={(e) => handleInput(e.target.value)}
@@ -82,7 +76,6 @@ export default function App() {
         cols={40}
       />
 
-      {/* Word count */}
       <div className='word-count'>
         <strong>Word Count:</strong> {wordCount}
       </div>
