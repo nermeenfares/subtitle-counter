@@ -26,34 +26,51 @@
 //     </div>
 //   );
 // }
-
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 export default function App() {
-  const [text, setText] = useState<string>("");
+  const [displayText, setDisplayText] = useState<string>('');
+  const [inputText, setInputText] = useState<string>('');
+  const animationDone = useRef(false); 
 
-  const countWords = (text: string) => {
-    const cleanedText = text.replace(/\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}/g, '');
+  useEffect(() => {
+    if (animationDone.current) return; 
 
-    const noNumbers = cleanedText.replace(/\b\d+\b/g, '');
+    const message = "heeeey beshooooo ❤️\nاكتب 😂";
+    let index = 0;
 
-    const words = noNumbers.match(/[\p{Script=Arabic}\w'’-]+/gu);
-    return words ? words.length : 0;
+    const typingInterval = setInterval(() => {
+      if (index < message.length-1) {
+        setDisplayText((prev) => prev + message[index]);
+        index++;
+      } else {
+        clearInterval(typingInterval);
+        animationDone.current = true; 
+      }
+    }, 100); 
+
+    return () => clearInterval(typingInterval);
+  }, []);
+
+  const handleInput = (text: string) => {
+    const cleanedText = text.replace(/\d+\s+\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}/g, '');
+    setInputText(cleanedText);
   };
 
   return (
     <div className='p-2'>
+      <div className='typing-animation'>
+        <pre>{displayText}</pre>
+      </div>
+
       <textarea
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Enter your text here..."
+        value={inputText}
+        onChange={(e) => handleInput(e.target.value)}
+        placeholder="Write something here..."
         rows={5}
         cols={40}
       />
-      <div>
-        <strong>Word Count:</strong> {countWords(text)}
-      </div>
     </div>
   );
 }
