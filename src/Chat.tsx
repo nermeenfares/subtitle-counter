@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+// import React, { useState } from 'react'
+
+import { useState } from "react"
 
 function Chat() {
-    const [messageContent,setMessageContent]=useState<string>("")
-    const onSubmit = (
+    const [messageContent]=useState<string>("")
+    // const onSubmit = (
         
-    )=>{
+    // )=>{
 
-    }
+    // }
   return (
     <>
    <input value={messageContent}/>
