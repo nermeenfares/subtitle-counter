@@ -47,3 +47,10 @@
 .read-the-docs {
   color: #888;
 }
+
+.word-count {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #333;
+  color: white;
+}

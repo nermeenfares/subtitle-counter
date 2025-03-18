@@ -32,38 +32,48 @@ import './App.css';
 export default function App() {
   const [displayText, setDisplayText] = useState<string>('');
   const [inputText, setInputText] = useState<string>('');
-  const animationDone = useRef(false); 
+  const [wordCount, setWordCount] = useState<number>(0);
+  const animationDone = useRef(false);
 
+  // Typing animation
   useEffect(() => {
-    if (animationDone.current) return; 
+    if (animationDone.current) return;
 
     const message = "heeeey beshooooo ❤️\nاكتب 😂";
     let index = 0;
 
     const typingInterval = setInterval(() => {
-      if (index < message.length-1) {
+      if (index < message.length - 1) {
         setDisplayText((prev) => prev + message[index]);
         index++;
       } else {
         clearInterval(typingInterval);
-        animationDone.current = true; 
+        animationDone.current = true;
       }
-    }, 100); 
+    }, 100);
 
     return () => clearInterval(typingInterval);
   }, []);
 
+  // Handle input and update word count
   const handleInput = (text: string) => {
+    // Remove lines that look like timestamps
     const cleanedText = text.replace(/\d+\s+\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}/g, '');
     setInputText(cleanedText);
+
+    // Calculate word count
+    const words = cleanedText.match(/[\p{Script=Arabic}\w'’-]+/gu) || [];
+    setWordCount(words.length);
   };
 
   return (
     <div className='p-2'>
+      {/* Typing animation */}
       <div className='typing-animation'>
         <pre>{displayText}</pre>
       </div>
 
+      {/* Input box */}
       <textarea
         value={inputText}
         onChange={(e) => handleInput(e.target.value)}
@@ -71,6 +81,11 @@ export default function App() {
         rows={5}
         cols={40}
       />
+
+      {/* Word count */}
+      <div className='word-count'>
+        <strong>Word Count:</strong> {wordCount}
+      </div>
     </div>
   );
 }
